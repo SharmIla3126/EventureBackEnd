@@ -45,6 +45,13 @@ public class EventController {
         eventService.deleteEvent(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+    @PutMapping("/{id}")
+    @Transactional
+    public ResponseEntity<Event> updateEvent(@PathVariable int id, @Validated @RequestBody Event event) {
+        Event updatedEvent = eventService.updateEvent(id, event);
+        return updatedEvent != null ? new ResponseEntity<>(updatedEvent, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
     @GetMapping("/{id}/max-participants")
     public ResponseEntity<Integer> getMaxParticipantsByEventId(@PathVariable int id) {
         int maxParticipants = eventService.getMaxParticipantsByEventId(id);
