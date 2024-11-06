@@ -29,8 +29,9 @@ public class Event {
 
     private String location;
     private String duration;
-    private int no_of_part;
-    private int maxParticipants; // Ensure this is present
+    private Integer no_of_part;
+    @Column(name = "max_participants")
+    private Integer maxParticipants; // Ensure this is present
     private String e_mode;
     private String description;
 
