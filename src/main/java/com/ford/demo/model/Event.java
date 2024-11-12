@@ -29,6 +29,7 @@ public class Event {
 
     private String location;
     private String duration;
+    @Column(name = "no_of_part")
     private Integer no_of_part;
     @Column(name = "max_participants")
     private Integer maxParticipants; // Ensure this is present

@@ -14,17 +14,20 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/api/events")
 public class EventController {
 
     @Autowired
     eventServiceImpl eventService;
+    @Autowired
+    IEventRepository eventRepository;
     @PostMapping
     @Transactional
     public ResponseEntity<Event> addEvent(@Validated @RequestBody Event event) {
         System.out.println("Adding event with maxParticipants: " + event.getMaxParticipants());
         Event createdEvent = eventService.addEvent(event);
+
         return new ResponseEntity<>(createdEvent, HttpStatus.CREATED);
     }
 

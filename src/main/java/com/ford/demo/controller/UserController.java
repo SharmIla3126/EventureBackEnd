@@ -27,6 +27,9 @@ public class UserController {
     IUserRepository userRepository;
     @Autowired
     eventServiceImpl eventService;
+
+    @Autowired
+    IEventRepository eventRepository;
     @PostMapping
     @Transactional
     public ResponseEntity<User> addUser(@Validated @RequestBody User user) {
@@ -54,10 +57,13 @@ public class UserController {
             int maxParticipants = event.getMaxParticipants();
 
             // Count current participants for the event
-            long currentParticipantCount = userService.countUsersByEventId(event.getId());
+            int currentParticipantCount = userService.countUsersByEventId(event.getId());
             if (currentParticipantCount >= maxParticipants) {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN); // 403 Forbidden
             }
+            event.setNo_of_part(currentParticipantCount + 1);
+            eventRepository.save(event);
+            eventRepository.flush();
 
             // Add the user
             User createdUser = userService.addUser(user);

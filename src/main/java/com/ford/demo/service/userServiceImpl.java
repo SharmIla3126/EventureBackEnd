@@ -4,6 +4,7 @@ import com.ford.demo.model.Event;
 import com.ford.demo.model.User;
 import com.ford.demo.repository.IEventRepository;
 import com.ford.demo.repository.IUserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ public class userServiceImpl implements IUserService{
     @Autowired
     IEventRepository eventRepository;
     @Override
+    @Transactional
     public User addUser(User user) {
        // return userRepository.save(user);
         if (user.getEvent() != null) {
@@ -24,6 +26,14 @@ public class userServiceImpl implements IUserService{
             Event event = eventRepository.findById(user.getEvent().getId())
                     .orElseThrow(() -> new IllegalArgumentException("Invalid event ID"));
             user.setEvent(event);
+
+
+            // Increment the participant count for the event
+            event.setNo_of_part(event.getNo_of_part() + 1);
+
+            // Save the updated event
+            eventRepository.save(event);  // This will persist the updated `no_of_part`
+            eventRepository.flush();
         } else {
             throw new IllegalArgumentException("Event cannot be null");
         }
